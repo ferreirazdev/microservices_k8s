@@ -4,8 +4,7 @@ metadata:
   name: store-app
   labels:
     component: store
-
-spec: 
+spec:
   containers:
     - name: store
       image: laithharb/store-app
