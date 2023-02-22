@@ -1,0 +1,32 @@
+# apiVersion: v1
+# kind: Pod
+# metadata:
+#   name: product-api
+#   labels:
+#     component: product-api
+# spec:
+#   containers:
+#     - name: product-api
+#       image: laithharb/products-api
+#       ports:
+#         - containerPort: 5002
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: products-api
+  template:
+    metadata:
+      labels:
+        component: products-api
+    spec:
+      containers:
+        - name: products-api
+          image: laithharb/products-api
+          ports:
+            - containerPort: 5002

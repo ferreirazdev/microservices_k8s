@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: store
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: store
+  template: # We are defining the pod that the deployment manage
+    metadata:
+      labels:
+        component: store
+    spec:
+      containers:
+        - name: store
+          image: laithharb/store-app
+          ports:
+            - containerPort: 80

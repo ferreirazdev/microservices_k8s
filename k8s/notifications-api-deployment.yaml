@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notifications-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      component: notifications-api
+  template:
+    metadata:
+      labels:
+        component: notifications-api
+    spec:
+      containers:
+        - name: notifications-api
+          image: laithharb/notifications-api
+          ports:
+            - containerPort: 5001
