@@ -20,17 +20,17 @@ spec:
           env:
             - name: TWILIO_ACCOUNT_SID
               valueFrom:
-                secretKeyRef:
+                secretKeyRef: # kubectl create secret generic twilio-secret -from-literal TWILIO_ACCOUNT_SID=AC72682e7d8ed1aa74673e68f5ae9e8557
                   name: twilio-secret
                   key: TWILIO_ACCOUNT_SID
             - name: TWILIO_AUTH_TOKEN
               valueFrom:
-                secretKeyRef:
-                  name: twilio-secret
+                secretKeyRef: # kubectl create secret generic twilio-secret -from-literal TWILIO_AUTH_TOKEN=765a55f04e8b9e705642e2f1615ac61d
+                  name: twilio-secret 
                   key: TWILIO_AUTH_TOKEN
             - name: TWILIO_NUMBER
               valueFrom:
-                secretKeyRef:
+                secretKeyRef: # kubectl create secret generic twilio-secret -from-literal TWILIO_NUMBER="+18573714765"
                   name: twilio-secret
                   key: TWILIO_NUMBER
           envFrom:
