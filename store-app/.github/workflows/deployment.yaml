@@ -1,0 +1,48 @@
+name: Deploy to Amazon EKS
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Login into DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - name: Build, Tag, and Push Image to DockerHub
+        id: build-image
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t ferreirazdev/store-app:$IMAGE_TAG .
+          docker push ferreirazdev/store-app:$IMAGE_TAG
+          echo "::set-output name=image::ferreirazdev/store-app:$IMAGE_TAG"
+
+      - name: Install Kubectl
+        uses: azure/setup-kubectl@v1
+
+      - name: Update Kubectl Context
+        run: aws eks update-kubeconfig --name ferocious-outfit-1657283158 --region us-east-1
+
+      - name: Deploy Image to Amazon EKS
+        run: |
+          kubectl set image deployment/store store=${{ steps.build-image.outputs.image }}
